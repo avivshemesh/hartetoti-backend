@@ -1,5 +1,5 @@
 # Hartetoti Backend API
-A robust Express.js backend service with MongoDB integration, authentication routes, and testing capabilities.
+A robust Express.js backend service with MongoDB integration, authentication routes, and testing capabilities..
 
 ## Prerequisites
 - Node.js - v22.14.0

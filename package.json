@@ -1,24 +1,37 @@
 {
   "name": "hartetoti",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "concurrently \"cd ../hartetoti_frontend && npm start\" \"nodemon server.js\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --detectOpenHandles",
+    "test:watch": "jest --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.10.1"
   },
   "devDependencies": {
+    "jest": "^29.5.0",
+    "mongodb-memory-server": "^10.1.4",
+    "supertest": "^7.0.0",
     "concurrently": "^9.1.2",
     "nodemon": "^3.1.9"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": ["**/tests/**/*.test.js"],
+    "setupFiles": ["<rootDir>/tests/jest.setup.js"],
+    "coveragePathIgnorePatterns": ["/node_modules/"],
+    "testTimeout": 10000
   }
 }

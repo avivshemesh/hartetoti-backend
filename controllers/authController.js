@@ -33,7 +33,7 @@ class AuthController {
 
             res.status(200).json({
                 success: true,
-                message: "Registration successful. Please verify your email.",
+                message: "Successfully logged in",
                 data: userData,
             });
         }  catch (error) {

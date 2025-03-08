@@ -10,10 +10,10 @@ function registerRoutes(app) {
         );
 
     routeFiles.forEach(file => {
-        const routeName = file.replace(/Routes\.js$|Router\.js$/i, '').toLowerCase();
+        const routeName = file.replace(/Routes\.js$|Router\.js$/i, '');
 
         // Convert to kebab-case for API paths
-        const routePath = str => str
+        const routePath = routeName
             .replace(/([a-z])([A-Z])/g, '$1-$2') // Handles camelCase
             .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2') // Handles PascalCase
             .toLowerCase();

@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/dbHandler");
 const registerRoutes = require('./routes');
+const cookieParser = require('cookie-parser')
 
 require("dotenv").config();
 
@@ -28,6 +29,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(cookieParser());
 
 registerRoutes(app);
 

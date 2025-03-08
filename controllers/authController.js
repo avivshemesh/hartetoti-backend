@@ -31,12 +31,19 @@ class AuthController {
 
             const userData = await authService.login(email, password);
 
+            res.cookie('token', userData.token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict',
+                maxAge: 7 * 24 * 60 * 60 * 1000,
+            });
+
             res.status(200).json({
                 success: true,
                 message: "Successfully logged in",
                 data: userData,
             });
-        }  catch (error) {
+        } catch (error) {
             res.status(401).json({
                 success: false,
                 message: error.message,

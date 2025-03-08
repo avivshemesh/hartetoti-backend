@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/dbHandler");
+const registerRoutes = require('./routes');
+
 require("dotenv").config();
 
 if (process.env.NODE_ENV !== 'test') {
@@ -24,9 +26,10 @@ app.use(cors({
   },
   credentials: true
 }));
+
 app.use(express.json());
 
-app.use("/api/auth", require("./routes/authRoutes"));
+registerRoutes(app);
 
 app.get("/", (req, res) => {
   res.send("Hello from the backend with MongoDB!");

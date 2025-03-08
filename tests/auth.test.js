@@ -66,6 +66,20 @@ describe('Auth Routes', () => {
             expect(res.body.message).toBe('Email already in use');
         });
 
+        it('should not register when password and confirm password dont match', async () => {
+            const res = await request(app)
+                .post('/api/auth/register')
+                .send({
+                    email: 'existing@example.com',
+                    password: 'password123',
+                    confirmPassword: 'dontmatchpassword',
+                });
+
+            expect(res.statusCode).toEqual(400);
+            expect(res.body.success).toBe(false);
+            expect(res.body.message).toBe('password and confirm password do not match');
+        })
+
         it('should validate email format', async () => {
             const res = await request(app)
                 .post('/api/auth/register')

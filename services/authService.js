@@ -26,12 +26,12 @@ class AuthService {
         });
 
         const verificationToken = newUser.generateEmailVerificationToken();
-        console.log("Generated token:", verificationToken);
+        console.log("Generated email token:", verificationToken);
 
         await newUser.save();
 
         const jwtToken = generateToken(newUser._id);
-        console.log("Generated token:", jwtToken);
+        console.log("Generated jwt token:", jwtToken);
 
         return {
             _id: newUser._id,

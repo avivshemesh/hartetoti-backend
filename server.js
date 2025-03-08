@@ -7,9 +7,23 @@ if (process.env.NODE_ENV !== 'test') {
   connectDB();
 }
 
+const origins = [
+  process.env.HARTETOTI_FRONT_URL
+]
+
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: function (origin, callback) {
+    if (origins.includes(origin) || !origin) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
 app.use(express.json());
 
 app.use("/api/auth", require("./routes/authRoutes"));

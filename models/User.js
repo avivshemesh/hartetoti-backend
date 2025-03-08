@@ -3,13 +3,12 @@ const bcrypt = require("bcryptjs");
 const { generateRandomString, generateHash } = require("../utils/utils");
 
 const UserSchema = new mongoose.Schema({
-    username: {
+    nickname: {
         type: String,
-        required: [true, "Please provide a username"],
-        unique: true,
         trim: true,
-        minlength: 3,
-        maxlength: 20
+        minlength: 0,
+        maxlength: 20,
+        default: ""
     },
     password: {
         type: String,

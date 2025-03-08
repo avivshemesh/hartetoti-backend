@@ -4,23 +4,23 @@ const { generateHash } = require("../utils/utils");
 
 class AuthService {
     async register(userData) {
-        const { username, email, password } = userData;
+        const { email, password, confirmPassword } = userData;
+
+        if (password !== confirmPassword) {
+            throw new Error("password and confirm password do not match");
+        }
 
         const userExists = await User.findOne({
-            $or: [{ username: username }, { email: email }]
+            $or: [{ email: email }]
         });
 
         if (userExists) {
             if (userExists.email === email) {
                 throw new Error("Email already in use");
             }
-            if (userExists.username === username) {
-                throw new Error(`Username '${username}' already in use`);
-            }
         }
 
         const newUser = new User({
-            username,
             password,
             email,
         });
@@ -35,7 +35,7 @@ class AuthService {
 
         return {
             _id: newUser._id,
-            username: newUser.username,
+            nickname: newUser.nickname,
             email: newUser.email,
             role: newUser.role,
             isEmailVerified: newUser.isEmailVerified,
@@ -60,7 +60,7 @@ class AuthService {
 
         return {
             _id: user._id,
-            username: user.username,
+            nickname: user.nickname,
             email: user.email,
             role: user.role,
             isEmailVerified: user.isEmailVerified,
@@ -77,7 +77,7 @@ class AuthService {
 
         return {
             _id: user._id,
-            username: user.username,
+            nickname: user.nickname,
             email: user.email,
             role: user.role,
             isEmailVerified: user.isEmailVerified

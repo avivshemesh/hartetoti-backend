@@ -34,22 +34,21 @@ describe('Auth Routes', () => {
             const res = await request(app)
                 .post('/api/auth/register')
                 .send({
-                    username: 'testuser',
                     email: 'test@example.com',
                     password: 'password123',
+                    confirmPassword: 'password123',
                 });
 
             expect(res.statusCode).toEqual(201);
             expect(res.body.success).toBe(true);
             expect(res.body.data).toHaveProperty('token');
-            expect(res.body.data.username).toBe('testuser');
+            expect(res.body.data.nickname).toBe('');
             expect(res.body.data.email).toBe('test@example.com');
             expect(res.body.data.isEmailVerified).toBe(false);
         });
 
         it('should not register a user with existing email', async () => {
             await User.create({
-                username: 'existinguser',
                 email: 'existing@example.com',
                 password: 'password123',
             });
@@ -57,9 +56,9 @@ describe('Auth Routes', () => {
             const res = await request(app)
                 .post('/api/auth/register')
                 .send({
-                    username: 'newuser',
                     email: 'existing@example.com',
                     password: 'password123',
+                    confirmPassword: 'password123',
                 });
 
             expect(res.statusCode).toEqual(400);
@@ -67,31 +66,10 @@ describe('Auth Routes', () => {
             expect(res.body.message).toBe('Email already in use');
         });
 
-        it('should not register a user with existing username', async () => {
-            await User.create({
-                username: 'existinguser',
-                email: 'user1@example.com',
-                password: 'password123',
-            });
-
-            const res = await request(app)
-                .post('/api/auth/register')
-                .send({
-                    username: 'existinguser',
-                    email: 'user2@example.com',
-                    password: 'password123',
-                });
-
-            expect(res.statusCode).toEqual(400);
-            expect(res.body.success).toBe(false);
-            expect(res.body.message).toBe("Username 'existinguser' already in use");
-        });
-
         it('should validate email format', async () => {
             const res = await request(app)
                 .post('/api/auth/register')
                 .send({
-                    username: 'testuser',
                     email: 'invalid-email',
                     password: 'password123',
                 });
@@ -104,7 +82,6 @@ describe('Auth Routes', () => {
             const res = await request(app)
                 .post('/api/auth/register')
                 .send({
-                    username: 'testuser',
                     email: 'test@example.com',
                     password: 'short',
                 });
@@ -119,7 +96,6 @@ describe('Auth Routes', () => {
         beforeEach(async () => {
             // create test user before each login test
             const user = new User({
-                username: 'loginuser',
                 email: 'login@example.com',
                 password: 'password123',
             });
@@ -137,7 +113,7 @@ describe('Auth Routes', () => {
             expect(res.statusCode).toEqual(200);
             expect(res.body.success).toBe(true);
             expect(res.body.data).toHaveProperty('token');
-            expect(res.body.data.username).toBe('loginuser');
+            expect(res.body.data.nickname).toBe('');
             expect(res.body.data.email).toBe('login@example.com');
         });
 
@@ -187,7 +163,6 @@ describe('Auth Routes', () => {
         beforeEach(async () => {
             // create test user and get token before each test
             const user = new User({
-                username: 'profileuser',
                 email: 'profile@example.com',
                 password: 'password123',
             });
@@ -210,7 +185,7 @@ describe('Auth Routes', () => {
 
             expect(res.statusCode).toEqual(200);
             expect(res.body.success).toBe(true);
-            expect(res.body.data.username).toBe('profileuser');
+            expect(res.body.data.nickname).toBe('');
             expect(res.body.data.email).toBe('profile@example.com');
         });
 
@@ -241,7 +216,6 @@ describe('Auth Routes', () => {
         beforeEach(async () => {
             // create test user and generate verification token before each test
             const user = new User({
-                username: 'verifyuser',
                 email: 'verify@example.com',
                 password: 'password123',
             });
@@ -301,7 +275,6 @@ describe('Auth Routes', () => {
     describe('POST /api/auth/forgot-password', () => {
         beforeEach(async () => {
             await User.create({
-                username: 'forgotuser',
                 email: 'forgot@example.com',
                 password: 'password123',
             });
@@ -355,7 +328,6 @@ describe('Auth Routes', () => {
         beforeEach(async () => {
             // create a user and generate a reset token before each test
             const user = new User({
-                username: 'resetuser',
                 email: 'reset@example.com',
                 password: 'oldpassword123',
             });
@@ -439,7 +411,6 @@ describe('Auth Routes', () => {
         beforeEach(async () => {
             // create user with known password for each test
             const user = new User({
-                username: 'changepassuser',
                 email: 'changepass@example.com',
                 password: 'currentpassword',
             });
